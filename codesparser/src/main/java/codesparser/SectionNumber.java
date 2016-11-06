@@ -1,6 +1,9 @@
 package codesparser;
 
-public class SectionNumber implements Comparable<SectionNumber> {
+import java.io.Serializable;
+
+public class SectionNumber implements Comparable<SectionNumber>, Serializable {
+	private static final long serialVersionUID = 1L;
 	private String sectionNumber;
 	private int position;
 	public SectionNumber(int position) {

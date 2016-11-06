@@ -1,5 +1,6 @@
 package codesparser;
 
+import java.io.Serializable;
 import java.util.*;
 
 import org.w3c.dom.Attr;
@@ -17,10 +18,11 @@ import org.w3c.dom.NodeList;
  * Time: 9:01 AM
  * To change this template use File | Settings | File Templates.
  */
-public class Code implements CodeReference, Comparable<Code> {
+public class Code implements CodeReference, Comparable<Code>, Serializable {
+	private static final long serialVersionUID = 1L;
 //	private static final Logger logger = Logger.getLogger(Code.class.getName());
 
-    private String title;
+	private String title;
     private String shortTitle;
 	private String facetHead;
     // Always 0 for code, increments for each level of children
@@ -319,4 +321,16 @@ public class Code implements CodeReference, Comparable<Code> {
 		return i1-i2;
 	}
 */
+	/**
+	 * Internal function for settings the hierarchy's parent
+	 * references after being loaded from XML.
+	 * @param parent set null at this level.
+	 */
+	@Override
+	public void rebuildParentReferences(CodeReference parent) {
+		for ( CodeReference reference: references ) {
+			reference.rebuildParentReferences(this);
+		}
+	}
+
 }

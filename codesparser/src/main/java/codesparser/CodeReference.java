@@ -59,4 +59,6 @@ public interface CodeReference {
 	public Element iterateXML( Document document, IteratorXMLHandler handler) throws Exception;
 	public Element createXML(Document document, boolean createChildren);
 	public Element createXML(Document document, Element element, boolean createChildren);
+	//
+	public void rebuildParentReferences(CodeReference parent);
 }

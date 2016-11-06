@@ -1,6 +1,5 @@
 package codesparser;
 
-import java.io.File;
 import java.util.ArrayList;
 
 public interface CodesInterface {
@@ -15,5 +14,5 @@ public interface CodesInterface {
     public CodeTitles[] getCodeTitles();
     public String getShortTitle(String title);
 
-    public void loadXMLCodes(File xmlCodes) throws Exception;
+    public boolean loadCodes();
 }

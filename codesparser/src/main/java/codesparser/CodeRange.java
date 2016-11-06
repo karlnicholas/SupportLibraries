@@ -1,5 +1,6 @@
 package codesparser;
 
+import java.io.Serializable;
 import java.util.logging.Logger;
 
 /**
@@ -9,7 +10,9 @@ import java.util.logging.Logger;
  * Time: 6:50 PM
  * To change this template use File | Settings | File Templates.
  */
-public class CodeRange {
+public class CodeRange implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	private static final Logger logger = Logger.getLogger(CodeRange.class.getName());
 
 //	private String sectionString;

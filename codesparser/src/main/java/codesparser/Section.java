@@ -1,6 +1,7 @@
 package codesparser;
 
 
+import java.io.Serializable;
 import java.util.*;
 
 import org.w3c.dom.Attr;
@@ -18,8 +19,9 @@ import org.w3c.dom.NodeList;
  * Time: 10:22 AM
  * To change this template use File | Settings | File Templates.
  */
-public class Section implements CodeReference {
-//	private static final Logger logger = Logger.getLogger(Section.class.getName());
+public class Section implements CodeReference, Serializable {
+	private static final long serialVersionUID = 1L;
+	//	private static final Logger logger = Logger.getLogger(Section.class.getName());
     private CodeReference parent;
     private String part;
     private String partNumber;
@@ -304,6 +306,11 @@ public class Section implements CodeReference {
 	}
 	
 	public void sortSectionNumbers(ArrayList<SectionNumber> sectionNumbers) { 
+	}
+
+	@Override
+	public void rebuildParentReferences(CodeReference parent) {
+		this.parent = parent;
 	}
 
 }

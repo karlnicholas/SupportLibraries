@@ -1,5 +1,6 @@
 package codesparser;
 
+import java.io.Serializable;
 import java.util.*;
 
 import org.w3c.dom.Attr;
@@ -9,8 +10,9 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class Subcode implements CodeReference {
-//	private static final Logger logger = Logger.getLogger(Subcode.class.getName());
+public class Subcode implements CodeReference, Serializable {
+	private static final long serialVersionUID = 1L;
+	//	private static final Logger logger = Logger.getLogger(Subcode.class.getName());
 	private CodeReference parent;
 	private String part;
     private String partNumber;
@@ -302,6 +304,14 @@ public class Subcode implements CodeReference {
 
 	public Code getCode() {
 		return null;
+	}
+
+	@Override
+	public void rebuildParentReferences(CodeReference parent) {
+		this.parent = parent;
+		for ( CodeReference reference: references ) {
+			reference.rebuildParentReferences(this);
+		}
 	}
 
 

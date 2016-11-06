@@ -1,22 +1,17 @@
 package code;
 
 import java.io.*;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
-import codesparser.*;
+import codesparser.CodesInterface;
+import codesparser.SectionNumber;
+import codesparser.Code;
+import codesparser.CodeReference;
+import codesparser.CodeTitles;
 
 /**
  * Created with IntelliJ IDEA. User: karl Date: 6/7/12 Time: 5:37 AM To change
@@ -27,8 +22,9 @@ public class CACodes implements CodesInterface {
     private static final String DEBUGFILE = null; // "bpc";	// "fam";
     
 	private ArrayList<Code> codes;
-	private CodeParser parser;
 	private HashMap<String, CodeTitles> mapCodeToTitles;
+	private CodeParser parser;
+//	private Unmarshaller unmarshaller;
 
     public static final String[] sectionTitles = {
         "title",
@@ -155,83 +151,81 @@ public class CACodes implements CodesInterface {
 	 * ok, there's more. The second numerical element of the section number is not ordered numberically, but lexically.
 	 * so .. 422.865 comes before 422.88
 	 */
-	public void loadFromRawPath(File path) throws FileNotFoundException {
+	public void loadFromRawPath(File path) throws IOException {
 		// ArrayList<File> files = new ArrayList<File>();
 
 		File[] files = path.listFiles( 
-			new FileFilter() {
-			public boolean accept(File file) {
-				if (file.getName().toString().contains("constitution"))
-					return false;
-				if ( DEBUGFILE != null ) { 
-					if (!file.getName().toString().contains(DEBUGFILE)) return false;
-				}
-				if ( file.isDirectory() ) return false;
-				return true;
-			}
-			
-		} );
-		
-		for ( int i=0; i < files.length; ++i ) {
-			logger.info("Processing " + files[i]);
-			loadRawFile( "ISO-8859-1", files[i] );
-		}
-
-		Collections.sort( codes );
-	}
-
-	public void loadXMLCodes(File xmlCodes) throws Exception {
-		parser = new CodeParser();
-		codes = new ArrayList<Code>();
-	
-		File[] files = xmlCodes.listFiles( 
 				new FileFilter() {
 				public boolean accept(File file) {
-					// if ( directory.isDirectory() ) return false;
 					if (file.getName().toString().contains("constitution"))
 						return false;
 					if ( DEBUGFILE != null ) { 
 						if (!file.getName().toString().contains(DEBUGFILE)) return false;
 					}
+					if ( file.isDirectory() ) return false;
 					return true;
 				}
 				
 			} );
-	
-		for (int i = 0, j = files.length; i < j; ++i) {
-			logger.info("Processing " + files[i] );
-			loadXMLFile(files[i]);
+
+		String encoding = StandardCharsets.ISO_8859_1.toString();
+		for ( File file: files ) {
+			logger.info("Processing " + file);
+			loadRawFile( encoding, file );
 		}
-	
+
 		Collections.sort( codes );
+	}
+
+	@Override
+	public boolean loadCodes() {
+
+		parser = new CodeParser();
+		codes = new ArrayList<Code>();
+//		JAXBContext ctx = JAXBContext.newInstance(Code.class);
+//		unmarshaller = ctx.createUnmarshaller();
+
+		final ClassLoader classLoader1 = Thread.currentThread().getContextClassLoader();
+		final ClassLoader classLoader2 = this.getClass().getClassLoader();
+		ClassLoader classLoader = null;
+		final String resourcePath = "CaliforniaStatutes/";
+		if ( classLoader1 == null ) logger.warning("classLoader1 is null");
+		else classLoader = classLoader1;
+		if ( classLoader2 == null ) logger.warning("classLoader2 is null");
+		else classLoader = classLoader2;
+		InputStream listStream = classLoader.getResourceAsStream(resourcePath + "files");
+	    final BufferedReader br = new BufferedReader(new InputStreamReader(listStream, StandardCharsets.US_ASCII));
+	    String fileName;
+	    List<URL> resources = new ArrayList<URL>();
+	    try {
+			while ( (fileName = br.readLine()) != null ) {
+				if ( !fileName.endsWith(".ser")) continue;
+				resources.add( classLoader.getResource(resourcePath + fileName) );
+			}
+		} catch (IOException e) {
+			logger.severe(e.getMessage());
+			return false;
+		}
+	    
+		for (URL url: resources) {
+			logger.info("Processing " + url.toString() );
+//			Code c = (Code) unmarshaller.unmarshal(url.openStream());
+			ObjectInputStream ois;
+			Code c;
+			try {
+				ois = new ObjectInputStream( url.openStream() );
+				c = (Code)ois.readObject();
+			} catch (ClassNotFoundException | IOException e) {
+				logger.severe(e.getMessage());
+				return false;
+			}
+			c.rebuildParentReferences(null);
+			codes.add( c );
+		}
+		Collections.sort( codes );
+		return true;
 	}		
 
-	private void loadXMLFile(File file) throws ParserConfigurationException, SAXException, FileNotFoundException, IOException {
-
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbFactory.newDocumentBuilder();
-        db.setEntityResolver(new EntityResolver() {
-            public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
-                return null; // Never resolve any IDs
-            }
-        });
-        
-        FileInputStream FIS = new FileInputStream( file );
-        Document xmlDoc = db.parse( FIS );
-        FIS.close();
-
-        NodeList nodeList = xmlDoc.getChildNodes();
-        
-        for ( int di=0, dl = nodeList.getLength(); di<dl; ++di ) {
-    		Node node = nodeList.item(di);
-    		String nname = node.getNodeName();
-	        if  ( nname.equals(CodeReference.CODE) ) {
-	        	codes.add(new Code(node));
-	        	return;
-			}
-        }
-        return;
-	}
 	
 	public void loadRawFile(String encoding, File file) throws FileNotFoundException {
 		codes.add( parser.parse(this, encoding, file) );
@@ -256,75 +250,34 @@ public class CACodes implements CodesInterface {
 		throw new RuntimeException("Code not found:" + codeTitle);
 	}
 
-	private CodeReference findReferenceByShortTitle(String shortTitle) {
-		Iterator<Code> ci = codes.iterator();
-		while (ci.hasNext()) {
-			Code code = ci.next();
-			if (code.getShortTitle().equals(shortTitle)) {
-				return code;
-			}
-		}
-		throw new RuntimeException("Code not found:" + shortTitle);
+	public String getShortTitle(String title) {
+		return mapCodeToTitles.get(title.toLowerCase()).getShortTitle(); 
 	}
 
-	public CodeReference findReferenceByFacet(String shortTitle, String fullFacet) {
-		return findReferenceByShortTitle(shortTitle).findReferenceByFacets( fullFacet );
+	@Override
+	public ArrayList<Code> getCodes() {
+		return codes;
+	}
+	
+	public static void main(String[] args) throws Exception {
+//		logger.setLevel(Level.FINE);
+		CACodes codes = new CACodes();
+//		codes.loadFromRawPath(Paths.get("c:/users/karl/code"));
+		codes.loadCodes();
+		// CodeParser parser = new CodeParser();
+//		Path path = FileSystems.getDefault().getPath("codes/ccp_table_of_contents");
+//		Path path = ;		// <--|
+//		Code c = parser.parse(path);		// <--|
+		CodeReference reference = codes.findReference("California Penal Code", new SectionNumber(0, "625") );
+		System.out.println(reference );
+//		System.out.println( reference.getFullFacet());
 	}
 
-// need something to build and manage "paths" .. 
-// ie strings that indicate the "part" and "partNumber" of each reference
-// leading up to the parent of the code section.. which needs its
-	// own path entry as well.
-	// for ex: family-1|division-3|chapter-3|article-5.6
-	// we need to ..
-	// generate a fullpath for any reference
-	// find the code (any level) for any fullpath generated ..
-	// ensure that the fullpath for just a code parent is unqiue
-	// it's essentially a string-id into the code base.
-	// also, the path needs to be parsable so as to point to a node
-	// in the code .. or better a routine here to take a fullpath
-	// and return the correct reference within with code heirarchy.
-	// find the code and then it can be used to generate a return path
-	// of references .. 
-	// which it may well do already..
-	// the only real issue is the top level .. and some of its first branches
-	// which doesn't have any part-partNumber, so one has to be made up
-	// question, do it on the fly, or, really, perhaps, when the code is 
-	// first parsed from leginfo's raw codes ...
-	// there MUST be a better way .. :)
-	// 
-/*	
-	public Code findCode(String codeTitle) {
-		String tempTitle = codeTitle.toLowerCase();
-		Iterator<Code> ci = codes.iterator();
-		while (ci.hasNext()) {
-			Code code = ci.next();
-			if (code.getTitle().toLowerCase().contains(tempTitle)) {
-				return code;
-			}
-		}
-		return null;
-	}
-	public static String generateFullPath(CodeReference reference ) {
-		String header = new String();
-		CodeReference codeReference = reference;
-		while ( codeReference != null ) {
-			String part = codeReference.getPart();
-			String partNumber = codeReference.getPartNumber();
-			if ( part == null ) {
-				String tpart = codeReference.getTitle().trim().replace("CALIFORNIA", "").trim();
-		    	part = tpart.substring(0, tpart.indexOf(" ", 0));	// CALIFORNIA
-				partNumber = "1";
-			}
-			header = part + "-" + partNumber + header;
-//			header = part + "-" + partNumber + header;
-			codeReference = codeReference.getParent();
-			if ( codeReference != null ) header = "|" + header;
-		}
-		return header;
+	@Override
+	public CodeTitles[] getCodeTitles() {
+		return mapCodeToTitles.values().toArray(new CodeTitles[0]);
 	}
 
-*/	
 	public Code findCodeFromFacet( String fullPath ) {
 		String mapValue = fullPath.substring(0, fullPath.indexOf('-')).toLowerCase();
 		Iterator<Entry<String, CodeTitles>> sit = mapCodeToTitles.entrySet().iterator();
@@ -337,35 +290,25 @@ public class CACodes implements CodesInterface {
 		throw new RuntimeException("Code Not Found:" + fullPath);
 	}
 
+	@Override
 	public String mapCodeToFacetHead(String title) {
 		return mapCodeToTitles.get(title.toLowerCase()).getFacetHead(); 
 	}
 	
-	public String getShortTitle(String title) {
-		return mapCodeToTitles.get(title.toLowerCase()).getShortTitle(); 
-	}
-
-	public ArrayList<Code> getCodes() {
-		return codes;
-	}
-	
-	public static void main(String[] args) throws Exception {
-//		logger.setLevel(Level.FINE);
-		CACodes codes = new CACodes();
-		codes.loadFromRawPath(new File("c:/users/karl/code"));
-//		codes.loadFromXMLPath( new File("src/main/webapp/WEB-INF/xmlcodes"));
-		// CodeParser parser = new CodeParser();
-//		Path path = FileSystems.getDefault().getPath("codes/ccp_table_of_contents");
-//		Path path = ;		// <--|
-//		Code c = parser.parse(path);		// <--|
-		CodeReference reference = codes.findReference("California Penal Code", new SectionNumber(0, "625") );
-		System.out.println(reference );
-		System.out.println( reference.getFullFacet());
-	}
 
 	@Override
-	public CodeTitles[] getCodeTitles() {
-		return mapCodeToTitles.values().toArray(new CodeTitles[0]);
+	public CodeReference findReferenceByFacet(String shortTitle, String fullFacet) {
+		return findReferenceByShortTitle(shortTitle).findReferenceByFacets( fullFacet );
 	}
 
+	private CodeReference findReferenceByShortTitle(String shortTitle) {
+		Iterator<Code> ci = codes.iterator();
+		while (ci.hasNext()) {
+			Code code = ci.next();
+			if (code.getShortTitle().equals(shortTitle)) {
+				return code;
+			}
+		}
+		throw new RuntimeException("Code not found:" + shortTitle);
+	}
 }
