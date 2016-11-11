@@ -1,7 +1,6 @@
 package codesparser;
 
 import java.io.Serializable;
-import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,7 +12,7 @@ import java.util.logging.Logger;
 public class CodeRange implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger logger = Logger.getLogger(CodeRange.class.getName());
+//	private static final Logger logger = Logger.getLogger(CodeRange.class.getName());
 
 //	private String sectionString;
     private SectionNumber sNumber;
@@ -59,16 +58,25 @@ public class CodeRange implements Serializable {
 		return sNumber;
 	}
 
+	public void setsNumber(SectionNumber sNumber) {
+		this.sNumber = sNumber;
+	}
+
 	public SectionNumber geteNumber() {
 		return eNumber;
 	}
 
+	public void seteNumber(SectionNumber eNumber) {
+		this.eNumber = eNumber;
+	}
+
 	@Override
 	public String toString() {
+		if ( sNumber == null ) return "";
 		StringBuilder sb = new StringBuilder(sNumber.toString());
 		if ( eNumber != null ) sb.append(" - " + eNumber);
 		String ret = sb.toString();
-		logger.finer(ret);
+//		logger.finer(ret);
 		return ret;
     }
     
