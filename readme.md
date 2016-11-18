@@ -1,5 +1,6 @@
 ### Support Libraries for cacodes domain
   * CodesParser. An n-node linked list for holding hierarchy of statutes.
-  * GSCalifornia. Utility library for loading and saving the California Statute hierarchy. 
+  * GSearch. Handles navigation of the Statutes taxonomy. 
+  * GSCalifornia. Parses, loads and saves the California statutes index.
   
 Used by the op (Opinion) and gs (Guided Search) projects.

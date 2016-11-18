@@ -14,5 +14,6 @@
   <modules>
     <module>codesparser</module>
     <module>gsearch</module>
+    <module>gscalifornia</module>
   </modules>
 </project>
