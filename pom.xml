@@ -15,5 +15,10 @@
     <module>codesparser</module>
     <module>gsearch</module>
     <module>gscalifornia</module>
+    
+    <module>openstates-client</module>
+    
+    <module>openstates-bulk</module>
+    <module>openstatestats</module>
   </modules>
 </project>
