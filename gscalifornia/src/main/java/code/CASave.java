@@ -156,9 +156,9 @@ public class CASave {
 			public void run() throws Exception {
 
 
-				File codesDir = new File("c:/users/karl/code");
+				File codesDir = new File("c:/users/karln/code");
 
-				File xmlcodes = new File("c:/users/karl/op/SupportLibraries/gscalifornia/src/main/resources/CaliforniaStatutes");
+				File xmlcodes = new File("c:/users/karln/op/SupportLibraries/gscalifornia/src/main/resources/CaliforniaStatutes");
 				
 				List<File> files = new CASave().createSerializedStatutes(codesDir, xmlcodes );
 				
