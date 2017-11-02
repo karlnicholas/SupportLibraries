@@ -38,7 +38,7 @@
   	<dependency>
   		<groupId>codesparser</groupId>
   		<artifactId>codesparser</artifactId>
-  		<version>0.2.6</version>
+  		<version>0.3.0</version>
   	</dependency>
   	<dependency>
   		<groupId>org.apache.lucene</groupId>
