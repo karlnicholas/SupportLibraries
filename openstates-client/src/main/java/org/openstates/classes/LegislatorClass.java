@@ -24,7 +24,7 @@ public class LegislatorClass extends ClassesBase {
 	/**
 	 * Constructor for testing purposes.
 	 * 
-	 * @param api
+	 * @param api api
 	 */
 	public LegislatorClass(OpenStatesAPI api) {
 		super(api);
@@ -32,6 +32,8 @@ public class LegislatorClass extends ClassesBase {
 
 	/**
 	 * Default constructor
+	 *  
+	 * @throws OpenStatesException exception
 	 */
 	public LegislatorClass()  throws OpenStatesException {
 		super();
@@ -42,6 +44,7 @@ public class LegislatorClass extends ClassesBase {
 	 * 
 	 * @param state Filter by state.
 	 * @return {@link Legislators}
+	 * @throws OpenStatesException exception
 	 */
 	public Legislators searchByState(
 			String state 
@@ -59,6 +62,7 @@ public class LegislatorClass extends ClassesBase {
 	 * @param state Filter by state.
 	 * @param active 'true' (default) to only include current legislators, 'false' will include all legislators
 	 * @return {@link Legislators}
+	 * @throws OpenStatesException exception
 	 */
 	public Legislators searchByStateActive(
 			String state, 
@@ -81,6 +85,7 @@ public class LegislatorClass extends ClassesBase {
 	 * @param state Filter by state.
 	 * @param term Only legislators that have a role in a certain term.
 	 * @return {@link Legislators}
+	 * @throws OpenStatesException exception
 	 */
 	public Legislators searchByStateTerm(
 			String state, 
@@ -109,6 +114,8 @@ public class LegislatorClass extends ClassesBase {
 	 * @param party Only legislators that have been associated with a specified party
 	 * @param first_name Filter by first name.
 	 * @param last_name Filter by last name.
+	 * @return Legislators Legislators 
+	 * @throws OpenStatesException exception
 	 * 
 	 */
 	public Legislators search(
@@ -136,7 +143,14 @@ public class LegislatorClass extends ClassesBase {
 			Legislators.class
 		);
 	}
-	
+
+	/**
+	 * 
+	 * @param longitude longitude
+	 * @param latitude latitude
+	 * @return legislators
+	 * @throws OpenStatesException exception
+	 */
 	public Legislators geoLookup(String longitude, String latitude) throws OpenStatesException {
 		return api.query(new MethodMap("legislators"), new ArgMap("long", longitude, "lat", latitude), Legislators.class);
 	}
@@ -144,8 +158,9 @@ public class LegislatorClass extends ClassesBase {
 	/**
 	 * This method returns the full detail for a legislator.
 	 * 
-	 * @param id
+	 * @param id String 
 	 * @return {@link Legislator}
+	 * @throws OpenStatesException exception
 	 */
 	public Legislator detail(String id) throws OpenStatesException {
 		return api.query(new MethodMap("legislators", id), null, Legislator.class);

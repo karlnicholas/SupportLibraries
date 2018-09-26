@@ -27,11 +27,10 @@ import com.fasterxml.jackson.databind.JsonMappingException;
  * class path. The bundle must have an entry for "bulkdatadir" which 
  * points to the directory which holds the bulk data.</p>
  * 
- * <p>
  * For example:<br>
  * <pre>
  * bulkdatadir=c:/tmp/bulkdata
- * </pre></p> 
+ * </pre>
  *
  */
 public final class LoadBulkData extends BulkData {
@@ -39,21 +38,26 @@ public final class LoadBulkData extends BulkData {
 	private static final String billsDirectory = "bills";
 	private static final String legislatorsDirectory = "legislators";
 	private static final String committeesDirectory = "committees";
-	
+
 	/**
 	 * Default constructor. Reads the ResourceBundle 
 	 * that holds the information for the bulkdata directory. 
+	 * 
+	 * @throws OpenStatesException exception
 	 */
 	public LoadBulkData() throws OpenStatesException {
 		super(ResourceBundle.getBundle("openstates"));
 	}
 
 	/**
+	 * 
 	 * Loads all bulk data into model objects. The only data currently included 
 	 * in the bulkdata are Bills, Committees, and Legislators.
 	 * 
 	 * @param fileName - name of bulkdata file that is zipped.
 	 * @param timeZone - timezone of the state capitol for this bulkdata.
+	 *
+	 * @throws OpenStatesException when error
 	 */
 	public void load(String fileName, TimeZone timeZone) throws OpenStatesException {
 		setLoadParameters(timeZone);
@@ -98,9 +102,8 @@ public final class LoadBulkData extends BulkData {
 			}
 		}
 	}
-	
+
 	/**
-	 * 
 	 * Load the current term. Bills that are loaded are 
 	 * bills in the openstates.zip bulkdata file for which the 
 	 * directory path contains the "year" string. For example, pass
@@ -111,9 +114,10 @@ public final class LoadBulkData extends BulkData {
 	 * <p>Legislators with the legislator.active flag is set to true 
 	 * are loaded.</p>
 	 * 
-	 * @param fileName
-	 * @param year
-	 * @param timeZone
+	 * @param fileName filename
+	 * @param year year
+	 * @param timeZone timezone
+	 * @throws OpenStatesException exception
 	 */
 	public void loadCurrentTerm(String fileName, String year, TimeZone timeZone ) throws OpenStatesException {
 		setLoadParameters(timeZone);
@@ -156,9 +160,8 @@ public final class LoadBulkData extends BulkData {
 			}
 		}
 	}
-	
+
 	/**
-	 * 
 	 * Load the current term. Bills that are loaded are 
 	 * bills in the openstates.zip bulkdata file for which the 
 	 * directory path contains the "year" string. For example, pass
@@ -169,10 +172,12 @@ public final class LoadBulkData extends BulkData {
 	 * <p>Legislators with the legislator.active flag is set to true 
 	 * are loaded.</p>
 	 * 
-	 * @param fileName
-	 * @param year
-	 * @param timeZone
-	 */	
+
+	 * @param fileName fileName
+	 * @param term term
+	 * @param timeZone timeZone
+	 * @throws OpenStatesException exception
+	 */
 	public void loadTerm(String fileName, String term, TimeZone timeZone ) throws OpenStatesException {
 		setLoadParameters(timeZone);
 		clearStatics();

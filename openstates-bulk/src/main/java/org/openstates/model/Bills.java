@@ -17,8 +17,8 @@ public class Bills {
 	/**
 	 * Get a Bill from the Bills map by its id.
 	 * 
-	 * @param id
-	 * @return Bill
+	 * @param id string
+	 * @return bill bill
 	 */
 	public static Bill get(String id) {
 		return bills.get(id);
@@ -27,17 +27,17 @@ public class Bills {
 	/**
 	 * Put a Bill into the Bills map.
 	 * 
-	 * @param id
-	 * @param bill
+	 * @param id String
+	 * @param bill Bill
 	 */
 	public static void put(String id, Bill bill ) {
 		bills.put(id,  bill);
 	}
-	
+
 	/**
 	 * Get the KeySet of the Bills map.
 	 * 
-	 * @return Set<String>
+	 * @return Set of Strings
 	 */
 	public static Set<String> keySet() {
 		return bills.keySet();
@@ -46,7 +46,7 @@ public class Bills {
 	/**
 	 * Get the values of the Bills map.
 	 * 
-	 * @return Collection<Bill>
+	 * @return collection of bills
 	 */
 	public static Collection<Bill> values() {
 		return bills.values();
@@ -59,11 +59,11 @@ public class Bills {
 	public static void clear() {
 		bills.clear();
 	}
-	
+
 	/**
 	 * Access the Bills map directly.
 	 * 
-	 * @return TreeMap<String, Bill>
+	 * @return treemap string by bill
 	 */
 	public TreeMap<String, Bill> bills() {
 		return bills;

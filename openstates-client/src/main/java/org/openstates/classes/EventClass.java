@@ -25,7 +25,7 @@ public class EventClass extends ClassesBase {
 	/**
 	 * Constructor for testing purposes.
 	 * 
-	 * @param api
+	 * @param api api
 	 */
 	public EventClass(OpenStatesAPI api) {
 		super(api);
@@ -33,6 +33,8 @@ public class EventClass extends ClassesBase {
 
 	/**
 	 * Default constructor
+	 * 
+	 * @throws OpenStatesException exception
 	 */
 	public EventClass()  throws OpenStatesException {
 		super();
@@ -42,8 +44,9 @@ public class EventClass extends ClassesBase {
 	 * Event Search
 	 * This method allows searching by state:
 	 * 
-	 * @param state
+	 * @param state state
 	 * @return {@link Events}
+	 * @throws OpenStatesException exception
 	 */
 	public Events searchByState(String state) throws OpenStatesException {
 		return api.query(
@@ -57,9 +60,10 @@ public class EventClass extends ClassesBase {
 	 * Event Search
 	 * This method allows searching by a number of fields:
 	 * 
-	 * @param state
-	 * @param type
+	 * @param state state
+	 * @param type type
 	 * @return {@link Events}
+	 * @throws OpenStatesException exception
 	 */
 	public Events search(String state, String type) throws OpenStatesException {
 		return api.query(
@@ -71,8 +75,9 @@ public class EventClass extends ClassesBase {
 
 	/**
 	 * 
-	 * @param id
+	 * @param id id
 	 * @return {@link Event}
+	 * @throws OpenStatesException exception
 	 */
 	public Event detail(String id) throws OpenStatesException {
 		return api.query(new MethodMap("events", id), null, Event.class);

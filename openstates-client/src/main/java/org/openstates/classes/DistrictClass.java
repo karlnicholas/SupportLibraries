@@ -23,7 +23,7 @@ public class DistrictClass extends ClassesBase {
 	/**
 	 * Constructor for testing purposes.
 	 * 
-	 * @param api
+	 * @param api api
 	 */
 	public DistrictClass(OpenStatesAPI api) {
 		super(api);
@@ -31,6 +31,8 @@ public class DistrictClass extends ClassesBase {
 
 	/**
 	 * Default constructor
+	 * 
+	 * @throws OpenStatesException exception
 	 */
 	public DistrictClass()  throws OpenStatesException {
 		super();
@@ -39,8 +41,9 @@ public class DistrictClass extends ClassesBase {
 	/**
 	 * List districts for state.
 	 * 
-	 * @param state
+	 * @param state state
 	 * @return {@link Districts}
+	 * @throws OpenStatesException exception
 	 */
 	public Districts searchByState(String state) throws OpenStatesException {
 		return api.query(new MethodMap("districts", state), null, Districts.class);
@@ -49,9 +52,10 @@ public class DistrictClass extends ClassesBase {
 	/**
 	 * List districts for state and chamber.
 	 * 
-	 * @param state
-	 * @param chamber
+	 * @param state state
+	 * @param chamber chamber
 	 * @return {@link Districts}
+	 * @throws OpenStatesException exception
 	 */
 	public Districts search(String state, String chamber) throws OpenStatesException {
 		return api.query(new MethodMap("districts", state, chamber), null, Districts.class);
@@ -60,8 +64,9 @@ public class DistrictClass extends ClassesBase {
 	/**
 	 * Get geographic boundary for a district.
 	 * 
-	 * @param boundary_id
+	 * @param boundary_id boundary_id
 	 * @return {@link District} 
+	 * @throws OpenStatesException exception
 	 */
 	public District boundaryLookup(String boundary_id) throws OpenStatesException {
 		return api.query(new MethodMap("districts", "boundary", boundary_id ), null, District.class);

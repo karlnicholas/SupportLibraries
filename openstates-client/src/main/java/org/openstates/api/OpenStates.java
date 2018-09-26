@@ -59,11 +59,12 @@ public class OpenStates implements OpenStatesAPI {
 //	public static TreeMap<String, TreeNode> pluses;
 //	public static TreeMap<String, TreeNode> newFields;
 
-    /**
-     * Initialize the API. Called instead of a constructor.
-     *
-     * @param bundle the bundle
-     */
+	/**
+	 * Initialize the API. Called instead of a constructor.
+	 * 
+	 * @param bundle the bundle
+	 * @throws OpenStatesException for problems.
+	 */
 	public OpenStates(ResourceBundle bundle) throws OpenStatesException {
 		// API not needed for testing
 		if ( !bundle.containsKey(apikeyKey)) throw new OpenStatesException(-1, "No apikey found in openstates.properties", null, null, null);

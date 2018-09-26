@@ -12,12 +12,12 @@ import org.openstates.data.Legislator;
  *
  */
 public class BulkDataUtils {
-	
+
 	/**
 	 * Get a list of the members of a committee as legislator objects.
-	 *  
-	 * @param committee
-	 * @return List<Legislator> 
+	 * 
+	 * @param committee committee
+	 * @return list of legislators
 	 */
 	public static List<Legislator> getCommitteeMembers(Committee committee) {
 		ArrayList<Legislator> members = new ArrayList<Legislator>();

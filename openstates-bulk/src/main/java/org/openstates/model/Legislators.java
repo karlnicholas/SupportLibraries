@@ -16,8 +16,8 @@ public class Legislators {
 	/**
 	 * Get a Legislator from the map by its id.
 	 * 
-	 * @param id
-	 * @return Legislator
+	 * @param id String
+	 * @return legislator Legislator
 	 */
 	public static Legislator get(String id) {
 		return legislators.get(id);
@@ -26,8 +26,8 @@ public class Legislators {
 	/**
 	 * Put a Legislator into the map.
 	 * 
-	 * @param id
-	 * @param legislator
+	 * @param id String
+	 * @param legislator Legislator
 	 */
 	public static void put(String id, Legislator legislator ) {
 		legislators.put(id, legislator);
@@ -36,7 +36,7 @@ public class Legislators {
 	/**
 	 * Get the KeySet of the Legislator map.
 	 * 
-	 * @return Set<String>
+	 * @return Set of Strings
 	 */
 	public static Set<String> keySet() {
 		return legislators.keySet();
@@ -45,7 +45,7 @@ public class Legislators {
 	/**
 	 * Get the values of the Legislator map.
 	 * 
-	 * @return Collection<Legislator>
+	 * @return Collection of Legislators
 	 */
 	public static Collection<Legislator> values() {
 		return legislators.values();
@@ -62,7 +62,7 @@ public class Legislators {
 	/**
 	 * Access the Legislators map directly.
 	 * 
-	 * @return TreeMap<String, Legislator>
+	 * @return TreeMap of String by Legislator
 	 */
 	public static TreeMap<String, Legislator> legislators() {
 		return legislators;

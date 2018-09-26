@@ -18,8 +18,8 @@ public class Committees {
 	/**
 	 * Get a Committee by its id.
 	 * 
-	 * @param key
-	 * @return Commiittee
+	 * @param key key
+	 * @return Committee committee
 	 */
 	public static Committee get(String key) {
 		return committees.get(key);
@@ -28,8 +28,8 @@ public class Committees {
 	/**
 	 * Put a committee into the Committees map.
 	 * 
-	 * @param id
-	 * @param committee
+	 * @param id id
+	 * @param committee committee
 	 */
 	public static void put(String id, Committee committee ) {
 		committees.put(id, committee);
@@ -38,7 +38,7 @@ public class Committees {
 	/**
 	 * Get the keySet of the TreeMap
 	 * 
-	 * @return Set<String>
+	 * @return set of strings
 	 */
 	public static Set<String> keySet() {
 		return committees.keySet();
@@ -47,7 +47,7 @@ public class Committees {
 	/**
 	 * Get the values of the Committees map.
 	 * 
-	 * @return Collection<Committee>
+	 * @return Collection of Committees
 	 */
 	public static Collection<Committee> values() {
 		return committees.values();
@@ -56,7 +56,7 @@ public class Committees {
 	/**
 	 * Access the Committees map directly.
 	 * 
-	 * @return TreeMap<String, Committee>
+	 * @return TreeMap String and Committee
 	 */
 	public static TreeMap<String, Committee> committees() {
 		return committees;

@@ -24,7 +24,7 @@ public class BillClass extends ClassesBase {
 	/**
 	 * Constructor for testing purposes.
 	 * 
-	 * @param api
+	 * @param api api
 	 */
 	public BillClass(OpenStatesAPI api) {
 		super(api);
@@ -32,6 +32,7 @@ public class BillClass extends ClassesBase {
 
 	/**
 	 * Default constructor
+	 * @throws OpenStatesException exception
 	 */
 	public BillClass()  throws OpenStatesException {
 		super();
@@ -56,6 +57,7 @@ public class BillClass extends ClassesBase {
 	 * @param per_page - Number of results per page, is unlimited unless page is set, in which case it defaults to 50.
 	 * 
 	 * @return {@link Bills} 
+	 * @throws OpenStatesException exception
 	 */
 	public Bills searchByDate(
 		String state, 
@@ -102,6 +104,7 @@ public class BillClass extends ClassesBase {
 	 * @param per_page - Number of results per page, is unlimited unless page is set, in which case it defaults to 50.
 	 * 
 	 * @return {@link Bills} 
+	 * @throws OpenStatesException exception
 	 */
 	public Bills searchByWindow(
 		String state, 
@@ -141,6 +144,7 @@ public class BillClass extends ClassesBase {
 	 * @param per_page - Number of results per page, is unlimited unless page is set, in which case it defaults to 50.
 	 * 
 	 * @return {@link Bills} 
+	 * @throws OpenStatesException exception
 	 */
 	public Bills searchByQuery(
 		String state, 
@@ -180,6 +184,7 @@ public class BillClass extends ClassesBase {
 	 * @param per_page - Number of results per page, is unlimited unless page is set, in which case it defaults to 50.
 	 * 
 	 * @return {@link Bills} 
+	 * @throws OpenStatesException exception
 	 */
 	public Bills searchBySubject(
 		String state, 
@@ -229,6 +234,7 @@ public class BillClass extends ClassesBase {
 	 * @param per_page - Number of results per page, is unlimited unless page is set, in which case it defaults to 50.
 	 * 
 	 * @return {@link Bills} 
+	 * @throws OpenStatesException exception
 	 */
 	public Bills searchByWindowSubject(
 		String state, 
@@ -278,6 +284,7 @@ public class BillClass extends ClassesBase {
 	 * @param per_page - Number of results per page, is unlimited unless page is set, in which case it defaults to 50.
 	 * 
 	 * @return {@link Bills} 
+	 * @throws OpenStatesException exception
 	 */
 	public Bills searchByQueryWindow(
 		String state, 
@@ -340,6 +347,7 @@ public class BillClass extends ClassesBase {
 	 * @param per_page - Number of results per page, is unlimited unless page is set, in which case it defaults to 50.
 	 * 
 	 * @return {@link Bills} 
+	 * @throws OpenStatesException exception
 	 */
 	public Bills search(
 		String state, 
@@ -382,10 +390,11 @@ public class BillClass extends ClassesBase {
 	 * Bill Detail
 	 * This method returns the full detail object for a bill.
 	 * 
-	 * @param state
-	 * @param session
-	 * @param number
+	 * @param state state
+	 * @param session session
+	 * @param number number
 	 * @return {@link Bill}
+	 * @throws OpenStatesException exception
 	 */
 	public Bill detail( String state, String session, String number) throws OpenStatesException {
 		return api.query( new MethodMap("bills", state, session, number), null, Bill.class);
@@ -395,8 +404,9 @@ public class BillClass extends ClassesBase {
 	 * Bill Detail
 	 * This method returns the full detail object for a bill.
 	 * 
-	 * @param bill_id
+	 * @param bill_id bill id
 	 * @return {@link Bill}
+	 * @throws OpenStatesException exception
 	 */
 	public Bill detailById( String bill_id) throws OpenStatesException {
 		return api.query( new MethodMap("bills", bill_id), null, Bill.class);

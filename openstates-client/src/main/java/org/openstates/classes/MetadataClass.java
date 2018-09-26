@@ -21,7 +21,7 @@ public class MetadataClass extends ClassesBase {
 	/**
 	 * Constructor for testing purposes.
 	 * 
-	 * @param api
+	 * @param api api
 	 */
 	public MetadataClass(OpenStatesAPI api) {
 		super(api);
@@ -29,6 +29,8 @@ public class MetadataClass extends ClassesBase {
 
 	/**
 	 * Default constructor
+	 *  
+	 * @throws OpenStatesException exception
 	 */
 	public MetadataClass() throws OpenStatesException {
 		super();
@@ -38,6 +40,7 @@ public class MetadataClass extends ClassesBase {
 	 * Get list of all states with data available and basic metadata about their status.
 	 * 
 	 * @return {@link MetadataOverview}
+	 * @throws OpenStatesException exception
 	 */
 	public MetadataOverview overview() throws OpenStatesException {
 		return api.query(new MethodMap("metadata"), null, MetadataOverview.class);
@@ -46,8 +49,9 @@ public class MetadataClass extends ClassesBase {
 	/**
 	 * Get detailed metadata for a particular state.
 	 * 
-	 * @param state
+	 * @param state String
 	 * @return {@link Metadata}
+	 * @throws OpenStatesException exception
 	 */
 	public Metadata state(String state) throws OpenStatesException {
 		return api.query(new MethodMap("metadata", state), null, Metadata.class);

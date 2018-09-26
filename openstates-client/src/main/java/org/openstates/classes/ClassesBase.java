@@ -21,10 +21,12 @@ public class ClassesBase {
 	
 	public static final String OpenStatesResource = "openstates";
 	protected static OpenStatesAPI api = null;
-	
+
 	/**
 	 * This class is supports the other interface classes. 
 	 * Default constructor
+	 * 
+	 * @throws OpenStatesException exception
 	 */
 	public ClassesBase() throws OpenStatesException {
 		if ( ClassesBase.api == null ) ClassesBase.api = new OpenStates(ResourceBundle.getBundle(OpenStatesResource));
@@ -33,7 +35,7 @@ public class ClassesBase {
 	/**
 	 * Constructor for testing purposes
 	 * 
-	 * @param testApi
+	 * @param testApi OpenStatesAPI
 	 */
 	public ClassesBase(OpenStatesAPI testApi) {
 		if ( ClassesBase.api == null ) ClassesBase.api = testApi;
